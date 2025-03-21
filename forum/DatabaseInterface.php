@@ -8,8 +8,25 @@ class DatabaseInterface
 
     public function __construct()
     {
-        $this->MySQLdb = new PDO("mysql:host=127.0.0.1;dbname=forum", "root", "");
-        $this->MySQLdb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        // Try to connect multiple times with increasing delay
+        $maxRetries = 10;
+        $retry = 0;
+        $connected = false;
+        
+        while (!$connected && $retry < $maxRetries) {
+            try {
+                $this->MySQLdb = new PDO("mysql:host=database;dbname=forum", "root", "");
+                $this->MySQLdb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $connected = true;
+            } catch (PDOException $e) {
+                $retry++;
+                if ($retry >= $maxRetries) {
+                    throw $e; // Re-throw the exception if we've exceeded retries
+                }
+                // Wait longer each retry
+                sleep($retry);
+            }
+        }
     }
 
     public function GetMySQLdb()

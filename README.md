@@ -1,7 +1,7 @@
 # This repository contains the source code of the web panel I have used in my book series of books: Cyber and Penetration Testing – Web Penetration Testing.
 
-Intro:
----------------
+Intro:	
+-------
 
 Link to the book: https://www.amazon.com/dp/1096435497
 
@@ -11,21 +11,22 @@ Screenshot:
 If you still want to use this panel and you don't have the book, Here is the steps to to setup the panel:
 
 Tools you will need to Download in order to solve the challenges:
------------------
+-----------------------------------------------------------------
+
 1. Burp Suit: https://portswigger.net/burp/communitydownload
 2. Sqlmap:	https://github.com/sqlmapproject/sqlmap
 3. dirbuster: https://sourceforge.net/projects/dirbuster/
 4. python: https://www.python.org/downloads/
 
-
 Setup:
------------------
+------
+
 1. Download xampp on your windows computer: https://www.apachefriends.org/download.html
 2. Move all the repository files to the folder: C:\xampp\htdocs
 3. Start xampp mysql and apache in the xampp software.
 4. Open your browser at http://127.0.0.1/phpmyadmin
 
-4.1. Create the database "sqli" 
+4.1. Create the database "sqli"
 
 4.1.1. press on the database "sqli"
 
@@ -35,7 +36,7 @@ Setup:
 
 4.1.4. press "Go"
 
-4.2. Create the database "forum" 
+4.2. Create the database "forum"
 
 4.2.1. press on the database "forum"
 

@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # Database service
+  database:
+    image: mysql:8.0
+    platform: linux/amd64
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=forum
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./forum/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - owasp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+    
+  # Forum service
+  forum:
+    build:
+      context: ./forum
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    ports:
+      - "8004:80"
+    volumes:
+      - ./challenge:/var/www/html/challenge
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      - WAIT_FOR_DB=true
+    command: sh -c 'sleep 10 && apache2-foreground'
+    networks:
+      - owasp-network
+    restart: unless-stopped
+
+  # Include any other services discovered in your project structure
+  # For example, if you have a 'sql-injection' directory:
+  # sql-injection:
+  #   build:
+  #     context: ./sql-injection
+  #   platform: linux/amd64
+  #   ports:
+  #     - "8001:80"
+  #   depends_on:
+  #     - database
+  #   networks:
+  #     - owasp-network
+
+  # Add more services based on project directories
+
+networks:
+  owasp-network:
+    driver: bridge
+
+volumes:
+  db-data: 
